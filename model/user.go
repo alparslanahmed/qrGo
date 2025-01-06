@@ -30,10 +30,20 @@ func (u *User) UserPublic(db *gorm.DB) interface{} {
 		Name          string `json:"name"`
 		EmailVerified bool   `json:"email_verified"`
 		Email         string `json:"email"`
+		BusinessName  string `json:"business_name"`
+		TaxOffice     string `json:"tax_office"`
+		TaxNumber     string `json:"tax_number"`
+		Address       string `json:"address"`
+		Phone         string `json:"phone"`
 	}{
 		ID:            u.ID,
 		Name:          u.Name,
 		EmailVerified: u.EmailVerified,
 		Email:         u.Email,
+		BusinessName:  u.BusinessName,
+		TaxOffice:     u.TaxOffice,
+		TaxNumber:     u.TaxNumber,
+		Address:       u.Address,
+		Phone:         u.Phone,
 	}
 }

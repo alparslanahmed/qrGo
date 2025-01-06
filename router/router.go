@@ -22,7 +22,7 @@ func SetupRoutes(app *fiber.App) {
 	auth := api.Group("/auth")
 	auth.Post("/token", handler.Login)
 	auth.Post("/register", handler.RegisterUser)
-	auth.Post("/verify_email", middleware.Protected(), handler.VerifyUser)
+	auth.Post("/verify_email", handler.VerifyUser)
 	auth.Get("/send_verification_code", middleware.Protected(), handler.RequestVerificationCode)
 	auth.Post("/forgot-password", handler.ForgotPassword)
 	auth.Post("/reset-password", handler.ResetPassword)

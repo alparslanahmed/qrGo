@@ -146,17 +146,11 @@ Enfes Menü Ekibi</p>
 `
 
 	message = strings.Replace(message, "[User]", user.Name, -1)
-	message = strings.Replace(message, "[verification_link]", fmt.Sprintf("%s/home?verification_token=%s", config.Config("FRONTEND_URL"), code), -1)
+	message = strings.Replace(message, "[verification_link]", fmt.Sprintf("%s/verification?token=%s", config.Config("FRONTEND_URL"), code), -1)
 	email.SendHTMLEmail(user.Email, "Email Hesabınızı Onaylayın", message, "/email.html")
 }
 
 func VerifyUser(c *fiber.Ctx) error {
-	user := GetUser(c.Locals("user"))
-
-	if user.EmailVerified {
-		return c.JSON(fiber.Map{"status": "success", "message": "Success verify", "data": nil})
-	}
-
 	type VerifyInput struct {
 		Code string `json:"code"`
 	}
@@ -174,11 +168,15 @@ func VerifyUser(c *fiber.Ctx) error {
 
 	var verify model.VerifyCode
 	db := database.DB
-	db.Where("code = ?", code).Where("email = ?", user.Email).First(&verify)
+
+	db.Where("code = ?", code).First(&verify)
 
 	if verify.Email == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "error", "message": "Invalid code", "data": nil})
 	}
+
+	var user model.User
+	db.Where("email = ?", verify.Email).First(&user)
 
 	// Update user
 	user.EmailVerified = true
@@ -557,7 +555,12 @@ func ChangePassword(c *fiber.Ctx) error {
 
 func UpdateProfile(c *fiber.Ctx) error {
 	type UpdateProfileInput struct {
-		Name string `json:"name"`
+		Name         string `json:"name"`
+		BusinessName string `json:"business_name"`
+		TaxOffice    string `json:"tax_office"`
+		TaxNumber    string `json:"tax_number"`
+		Address      string `json:"address"`
+		Phone        string `json:"phone"`
 	}
 	input := new(UpdateProfileInput)
 
@@ -565,16 +568,26 @@ func UpdateProfile(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "error", "message": "Error on parsing", "data": err})
 	}
 
-	newName := input.Name
-
-	if newName == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "error", "message": "Name cannot be empty", "data": nil})
-	}
-
 	user := GetUser(c.Locals("user"))
 
-	// Update user's name
-	user.Name = newName
+	if input.Name != "" {
+		user.Name = input.Name
+	}
+	if input.BusinessName != "" {
+		user.BusinessName = input.BusinessName
+	}
+	if input.TaxOffice != "" {
+		user.TaxOffice = input.TaxOffice
+	}
+	if input.TaxNumber != "" {
+		user.TaxNumber = input.TaxNumber
+	}
+	if input.Address != "" {
+		user.Address = input.Address
+	}
+	if input.Phone != "" {
+		user.Phone = input.Phone
+	}
 
 	db := database.DB
 	if err := db.Save(&user).Error; err != nil {
