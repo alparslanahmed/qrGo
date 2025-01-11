@@ -16,6 +16,7 @@ type User struct {
 	TaxNumber     string `json:"tax_number"`
 	Address       string `json:"address"`
 	Phone         string `json:"phone"`
+	LogoURL       string `json:"logo_url"`
 }
 
 func (u *User) CheckBillingInfo(db *gorm.DB) bool {
@@ -35,6 +36,7 @@ func (u *User) UserPublic(db *gorm.DB) interface{} {
 		TaxNumber     string `json:"tax_number"`
 		Address       string `json:"address"`
 		Phone         string `json:"phone"`
+		LogoURL       string `json:"logo_url"`
 	}{
 		ID:            u.ID,
 		Name:          u.Name,
@@ -45,5 +47,6 @@ func (u *User) UserPublic(db *gorm.DB) interface{} {
 		TaxNumber:     u.TaxNumber,
 		Address:       u.Address,
 		Phone:         u.Phone,
+		LogoURL:       u.LogoURL,
 	}
 }

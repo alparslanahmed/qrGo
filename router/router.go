@@ -9,6 +9,8 @@ import (
 
 // SetupRoutes setup router api
 func SetupRoutes(app *fiber.App) {
+	app.Static("/public", "./public")
+
 	// Middleware
 	api := app.Group("/api", logger.New())
 	api.Get("/", handler.Hello)
@@ -29,5 +31,7 @@ func SetupRoutes(app *fiber.App) {
 	auth.Post("/change-password", middleware.Protected(), handler.ChangePassword)
 	auth.Post("/google", handler.GoogleLogin)
 	auth.Post("/profile", middleware.Protected(), handler.UpdateProfile)
+	auth.Post("/avatar", middleware.Protected(), handler.UpdateAvatar)
 	auth.Get("/user", middleware.Protected(), handler.User)
+
 }

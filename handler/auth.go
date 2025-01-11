@@ -6,10 +6,16 @@ import (
 	"alparslanahmed/qrGo/email"
 	"alparslanahmed/qrGo/helper"
 	"alparslanahmed/qrGo/model"
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"github.com/nfnt/resize"
+	"image"
+	_ "image/jpeg"
+	_ "image/png"
 	"net/mail"
+	"os"
 	"strings"
 	"time"
 
@@ -18,6 +24,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 
+	"github.com/chai2010/webp"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -595,4 +602,69 @@ func UpdateProfile(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{"status": "success", "message": "Profile updated successfully", "data": user.UserPublic(db)})
+}
+
+type UpdateAvatarInput struct {
+	Image []byte `json:"image"`
+}
+
+func UpdateAvatar(c *fiber.Ctx) error {
+
+	// Parse the image from the request body
+	input := new(UpdateAvatarInput)
+	if err := c.BodyParser(&input); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "error", "message": "Error parsing image", "data": err})
+	}
+
+	// Check the image format
+	_, format, err := image.DecodeConfig(bytes.NewReader(input.Image))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "error", "message": "Unknown image format", "data": err.Error(), "format": format})
+	}
+
+	// Decode the image
+	img, _, err := image.Decode(bytes.NewReader(input.Image))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "error", "message": "Error decoding image", "data": err.Error()})
+	}
+
+	// Resize the image to a max height of 200 pixels
+	resizedImg := resize.Resize(0, 200, img, resize.Lanczos3)
+
+	// Encode the resized image to a buffer
+	var buf bytes.Buffer
+	if err := webp.Encode(&buf, resizedImg, &webp.Options{Quality: 100}); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "error", "message": "Error encoding image", "data": err.Error()})
+	}
+
+	// Generate a unique file name
+	fileName := fmt.Sprintf("%d_avatar.webp", time.Now().Unix())
+
+	// Save the image bytes to the public folder
+	filePath := fmt.Sprintf("./public/%s", fileName)
+	if err := os.WriteFile(filePath, buf.Bytes(), 0644); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "error", "message": "Error saving file", "data": err.Error()})
+	}
+
+	// Get the user from the context
+	user := GetUser(c.Locals("user"))
+
+	// Remove the old image if it exists
+	if user.LogoURL != "" {
+		oldFilePath := fmt.Sprintf(".%s", user.LogoURL)
+		if err := os.Remove(oldFilePath); err != nil && !os.IsNotExist(err) {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "error", "message": "Error removing old file", "data": err.Error()})
+		}
+	}
+
+	// Update the user's avatar URL
+	user.LogoURL = fmt.Sprintf("/public/%s", fileName)
+
+	// Save the user to the database
+	db := database.DB
+	if err := db.Save(&user).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "error", "message": "Error updating user", "data": err.Error()})
+	}
+
+	return c.JSON(fiber.Map{"status": "success", "message": "Avatar updated successfully", "data": user.UserPublic(db)})
 }
