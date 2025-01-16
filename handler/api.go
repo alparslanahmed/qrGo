@@ -6,10 +6,10 @@ import (
 	"alparslanahmed/qrGo/model"
 	"bytes"
 	"fmt"
-	"github.com/chai2010/webp"
 	"github.com/gofiber/fiber/v2"
 	"github.com/nfnt/resize"
 	"image"
+	"image/png"
 	"os"
 	"strconv"
 	"time"
@@ -60,12 +60,12 @@ func CreateCategory(c *fiber.Ctx) error {
 
 	// Encode the resized image to a buffer
 	var buf bytes.Buffer
-	if err := webp.Encode(&buf, resizedImg, &webp.Options{Quality: 100}); err != nil {
+	if err := png.Encode(&buf, resizedImg); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "error", "message": "Error encoding image", "data": err.Error()})
 	}
 
 	// Generate a unique file name
-	fileName := fmt.Sprintf("category_user_%d_%d.webp", user.ID, time.Now().Unix())
+	fileName := fmt.Sprintf("category_user_%d_%d.png", user.ID, time.Now().Unix())
 
 	// Save the image bytes to the public folder
 	filePath := fmt.Sprintf("./public/%s", fileName)
@@ -118,12 +118,12 @@ func UpdateCategory(c *fiber.Ctx) error {
 
 		// Encode the resized image to a buffer
 		var buf bytes.Buffer
-		if err := webp.Encode(&buf, resizedImg, &webp.Options{Quality: 100}); err != nil {
+		if err := png.Encode(&buf, resizedImg); err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "error", "message": "Error encoding image", "data": err.Error()})
 		}
 
 		// Generate a unique file name
-		fileName := fmt.Sprintf("category_user_%d_%d.webp", user.ID, time.Now().Unix())
+		fileName := fmt.Sprintf("category_user_%d_%d.png", user.ID, time.Now().Unix())
 
 		// Save the image bytes to the public folder
 		filePath := fmt.Sprintf("./public/%s", fileName)
@@ -212,12 +212,12 @@ func CreateProduct(c *fiber.Ctx) error {
 
 	// Encode the resized image to a buffer
 	var buf bytes.Buffer
-	if err := webp.Encode(&buf, resizedImg, &webp.Options{Quality: 100}); err != nil {
+	if err := png.Encode(&buf, resizedImg); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "error", "message": "Error encoding image", "data": err.Error()})
 	}
 
 	// Generate a unique file name
-	fileName := fmt.Sprintf("product_user_%d_%d.webp", user.ID, time.Now().Unix())
+	fileName := fmt.Sprintf("product_user_%d_%d.png", user.ID, time.Now().Unix())
 
 	// Save the image bytes to the public folder
 	filePath := fmt.Sprintf("./public/%s", fileName)
@@ -273,12 +273,12 @@ func UpdateProduct(c *fiber.Ctx) error {
 
 		// Encode the resized image to a buffer
 		var buf bytes.Buffer
-		if err := webp.Encode(&buf, resizedImg, &webp.Options{Quality: 100}); err != nil {
+		if err := png.Encode(&buf, resizedImg); err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "error", "message": "Error encoding image", "data": err.Error()})
 		}
 
 		// Generate a unique file name
-		fileName := fmt.Sprintf("product_user_%d_%d.webp", user.ID, time.Now().Unix())
+		fileName := fmt.Sprintf("product_user_%d_%d.png", user.ID, time.Now().Unix())
 
 		// Save the image bytes to the public folder
 		filePath := fmt.Sprintf("./public/%s", fileName)
