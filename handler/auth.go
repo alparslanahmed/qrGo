@@ -638,7 +638,7 @@ func UpdateAvatar(c *fiber.Ctx) error {
 	}
 
 	// Generate a unique file name
-	fileName := fmt.Sprintf("avatar_user_%d_%d.png", time.Now().Unix())
+	fileName := fmt.Sprintf("avatar_%d.png", time.Now().Unix())
 
 	// Save the image bytes to the public folder
 	filePath := fmt.Sprintf("./public/%s", fileName)
