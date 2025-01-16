@@ -13,6 +13,7 @@ import (
 	"github.com/nfnt/resize"
 	"image"
 	_ "image/jpeg"
+	"image/png"
 	_ "image/png"
 	"net/mail"
 	"os"
@@ -24,7 +25,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 
-	"github.com/chai2010/webp"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -633,12 +633,12 @@ func UpdateAvatar(c *fiber.Ctx) error {
 
 	// Encode the resized image to a buffer
 	var buf bytes.Buffer
-	if err := webp.Encode(&buf, resizedImg, &webp.Options{Quality: 100}); err != nil {
+	if err := png.Encode(&buf, resizedImg); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"status": "error", "message": "Error encoding image", "data": err.Error()})
 	}
 
 	// Generate a unique file name
-	fileName := fmt.Sprintf("avatar_user_%d_%d.webp", time.Now().Unix())
+	fileName := fmt.Sprintf("avatar_user_%d_%d.png", time.Now().Unix())
 
 	// Save the image bytes to the public folder
 	filePath := fmt.Sprintf("./public/%s", fileName)
