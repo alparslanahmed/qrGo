@@ -540,16 +540,7 @@ func ChangePassword(c *fiber.Ctx) error {
 
 	// Send password change notification email
 	var message = `
-    <p>Dear [User],</p>
-
-    <p>Your password for your Enfes Menü account has been successfully changed. If you did not make this change, please contact our support team immediately.</p>
-
-    <p>If you have any questions or need further assistance, please contact our support team at <a href="mailto:contact@inkbot.tattoo" style="color: #1a73e8;">contact@inkbot.tattoo</a>.</p>
-
-    <p>Thank you for using Enfes Menü!</p>
-
-    <p>Best regards,<br>
-    The Enfes Menü Team</p>
+    <p>Sevgili [User],</p> <p>Enfes Menü hesabınızın şifresi başarıyla değiştirildi. Bu değişikliği siz yapmadıysanız, lütfen hemen destek ekibimizle iletişime geçin.</p> <p>Herhangi bir sorunuz veya ek yardıma ihtiyacınız olursa, lütfen şu adresten bize ulaşın: <a href="mailto:iletisim@enfesmenu.com" style="color: #1a73e8;">iletisim@enfesmenu.com</a>.</p> <p>Enfes Menü’yü kullandığınız için teşekkür ederiz!</p> <p>Saygılarımızla,<br> Enfes Menü Ekibi</p>
     `
 
 	message = strings.Replace(message, "[User]", user.Name, -1)
