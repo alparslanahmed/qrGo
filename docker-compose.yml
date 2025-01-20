@@ -8,6 +8,8 @@ services:
     depends_on:
       - db
       - redis
+    volumes:
+      - ./public:/root/public
     environment:
       - DB_HOST=db
       - DB_PORT=${DB_PORT}

@@ -25,8 +25,10 @@ WORKDIR /root/
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/main .
 COPY --from=builder /app/.env .
-COPY --from=builder /app/public .
 COPY --from=builder /app/email ./email
+
+
+
 # Expose port 8080 to the outside world
 EXPOSE 5001
 
