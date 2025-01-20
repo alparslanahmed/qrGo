@@ -12,6 +12,7 @@ type User struct {
 	Password      string `gorm:"not null" json:"password"`
 	EmailVerified bool   `json:"email_verified"`
 	BusinessName  string `json:"business_name"`
+	BusinessSlug  string `json:"business_slug"`
 	TaxOffice     string `json:"tax_office"`
 	TaxNumber     string `json:"tax_number"`
 	Address       string `json:"address"`
@@ -32,6 +33,7 @@ func (u *User) UserPublic(db *gorm.DB) interface{} {
 		EmailVerified bool   `json:"email_verified"`
 		Email         string `json:"email"`
 		BusinessName  string `json:"business_name"`
+		BusinessSlug  string `json:"business_slug"`
 		TaxOffice     string `json:"tax_office"`
 		TaxNumber     string `json:"tax_number"`
 		Address       string `json:"address"`
@@ -43,10 +45,28 @@ func (u *User) UserPublic(db *gorm.DB) interface{} {
 		EmailVerified: u.EmailVerified,
 		Email:         u.Email,
 		BusinessName:  u.BusinessName,
+		BusinessSlug:  u.BusinessSlug,
 		TaxOffice:     u.TaxOffice,
 		TaxNumber:     u.TaxNumber,
 		Address:       u.Address,
 		Phone:         u.Phone,
 		LogoURL:       u.LogoURL,
+	}
+}
+
+// UserPublic func to return public user data
+func (u *User) UserBusiness() interface{} {
+	return struct {
+		BusinessName string `json:"business_name"`
+		BusinessSlug string `json:"business_slug"`
+		Address      string `json:"address"`
+		Phone        string `json:"phone"`
+		LogoURL      string `json:"logo_url"`
+	}{
+		BusinessName: u.BusinessName,
+		BusinessSlug: u.BusinessSlug,
+		Address:      u.Address,
+		Phone:        u.Phone,
+		LogoURL:      u.LogoURL,
 	}
 }

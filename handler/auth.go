@@ -72,6 +72,7 @@ func RegisterUser(c *fiber.Ctx) error {
 		Name:         input.Name,
 		Password:     string(hash),
 		BusinessName: input.BusinessName,
+		BusinessSlug: fmt.Sprintf("%s-%d", helper.GenerateSlug(input.BusinessName), time.Now().Unix()),
 		TaxOffice:    input.TaxOffice,
 		TaxNumber:    input.TaxNumber,
 		Address:      input.Address,
@@ -573,6 +574,7 @@ func UpdateProfile(c *fiber.Ctx) error {
 	}
 	if input.BusinessName != "" {
 		user.BusinessName = input.BusinessName
+		user.BusinessSlug = fmt.Sprintf("%s-%d", helper.GenerateSlug(input.BusinessName), time.Now().Unix())
 	}
 	if input.TaxOffice != "" {
 		user.TaxOffice = input.TaxOffice
