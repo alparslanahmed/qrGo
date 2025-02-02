@@ -4,7 +4,7 @@ services:
   app:
     build: .
     ports:
-      - "5001:5001"
+      - "127.0.0.1:5001:5001"
     depends_on:
       - db
       - redis
@@ -22,7 +22,7 @@ services:
     restart: always  # Add this line
 
   db:
-    image: postgres:13-alpine
+    image: postgres:17rc1-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -30,20 +30,20 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
     ports:
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
     restart: always  # Add this line
 
   redis:
-    image: redis:6-alpine
+    image: redis:7.4.0-alpine
     ports:
-      - "6380:6379"
+      - "127.0.0.1:6380:6379"
     command: redis-server
     volumes:
       - redis_data:/data
     restart: always  # Add this line
 
   nginx:
-    image: nginx:alpine
+    image: nginx:1.27.1-alpine
     ports:
       - "80:80"
       - "443:443"
