@@ -8,9 +8,10 @@ require (
 	github.com/gofiber/websocket/v2 v2.2.1
 	github.com/golang-jwt/jwt/v4 v4.5.1
 	github.com/joho/godotenv v1.5.1
+	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/ozgur-yalcin/parasut.go v0.0.0-20231129003734-feb4970d9768
 	github.com/redis/go-redis/v9 v9.7.0
-	golang.org/x/crypto v0.31.0
+	golang.org/x/crypto v0.36.0
 	google.golang.org/api v0.214.0
 	gorm.io/driver/postgres v1.5.11
 	gorm.io/gorm v1.25.12
@@ -41,7 +42,6 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.15 // indirect
-	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
 	github.com/philhofer/fwd v1.1.2 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
@@ -49,17 +49,15 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
-	github.com/vincent-petithory/dataurl v1.0.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.54.0 // indirect
 	go.opentelemetry.io/otel v1.29.0 // indirect
 	go.opentelemetry.io/otel/metric v1.29.0 // indirect
 	go.opentelemetry.io/otel/trace v1.29.0 // indirect
-	golang.org/x/image v0.23.0 // indirect
-	golang.org/x/net v0.33.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/oauth2 v0.24.0 // indirect
-	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/sync v0.12.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241209162323-e6fa225c2576 // indirect
 	google.golang.org/grpc v1.67.1 // indirect
 	google.golang.org/protobuf v1.35.2 // indirect
